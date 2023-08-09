@@ -59,7 +59,7 @@
 
   <div class="mb-3">
     <label for="mobile" class="form-label">Mobile</label>
-    <input type="number" class="form-control" id="mobile" placeholder="Mobile" formControlName="mobile" [ngClass]="{error: getControl('mobile')?.errors && getControl('mobile').touched}"/>
+    <input type="text" class="form-control" id="mobile" placeholder="Mobile" formControlName="mobile" [ngClass]="{error: getControl('mobile')?.errors && getControl('mobile').touched}"/>
     <div *ngIf="getControl('mobile')?.errors && getControl('mobile')?.touched">
       <small class="text-danger" *ngIf="getControl('mobile')?.errors?.['required']">Mobile number is required</small>
     </div>
@@ -102,7 +102,7 @@
 </div>
 <div class="mb-3">
   <label for="pincode" class="form-label">Pincode</label>
-  <input type="number" class="form-control" id="pincode" placeholder="Pincode" formControlName="pincode" [ngClass]="{error: getControl('pincode')?.errors && getControl('pincode').touched}"/>
+  <input type="text" class="form-control" id="pincode" placeholder="Pincode" formControlName="pincode" [ngClass]="{error: getControl('pincode')?.errors && getControl('pincode').touched}"/>
   <div *ngIf="getControl('pincode')?.errors && getControl('pincode')?.touched">
     <small class="text-danger" *ngIf="getControl('pincode')?.errors?.['required']">Pincode is required</small>
   </div>

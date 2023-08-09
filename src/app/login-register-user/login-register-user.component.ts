@@ -8,14 +8,21 @@ import {
 import { PasswordMatch } from '../password-match';
 import { HttpClient } from '@angular/common/http';
 import { CSCService } from '../csc.service';
-
+import { UserloginService } from '../userlogin.service';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-login-register-user',
   templateUrl: './login-register-user.component.html',
   styleUrls: ['./login-register-user.component.css'],
 })
 export class LoginRegisterUserComponent {
-  constructor(private _http:HttpClient,  private dropdownService: CSCService, ) {}
+  constructor(private _http:HttpClient,  private dropdownService: CSCService, private userloginregister:UserloginService, private router:Router,private toastr: ToastrService ) {}
+
+
+  success(): void {
+    this.toastr.success('This is a success message', 'Tada');
+  }
   public registerform!: FormGroup;
 
   countries: any[] = [];
@@ -25,7 +32,7 @@ export class LoginRegisterUserComponent {
   ngOnInit(){
     this.registerform = new FormGroup(
       {
-        userid: new FormControl(),
+        userid: new FormControl(1),
         uname: new FormControl('', [
           Validators.required,
           Validators.maxLength(10),
@@ -55,9 +62,9 @@ export class LoginRegisterUserComponent {
           Validators.minLength(10),
           Validators.maxLength(10),
         ]),
-        country: new FormControl([null]),
-        state: new FormControl([null]),
-        city: new FormControl([null]),
+        country: new FormControl(''),
+        state: new FormControl(''),
+        city: new FormControl(''),
         pincode: new FormControl('', [
           Validators.required
         ]),
@@ -77,9 +84,39 @@ export class LoginRegisterUserComponent {
 
 
 
-  registerFn() {
-    console.log(this.registerform.value);
-    console.log(this.registerform.valid);
+  registerFn(){
+
+    const countryid: number = parseInt(this.registerform.get('country').value) ;
+     const selectedOption = this.countries.find(option => option.countryId === countryid);
+    if (selectedOption) {
+      this.registerform.get('country').setValue(selectedOption.countryName);
+    }
+  const stateid: number = parseInt( this.registerform.get('state').value);
+  const selectedOption2 = this.states.find(option => option.stateId === stateid);
+    if (selectedOption2) {
+      this.registerform.get('state').setValue(selectedOption2.stateName);
+    }
+
+    const cityid: number = parseInt( this.registerform.get('city').value);
+  const selectedOption3 = this.cities.find(option => option.cityId === cityid);
+    if (selectedOption2) {
+      this.registerform.get('city').setValue(selectedOption3.cityName);
+    }
+
+
+    this.userloginregister.registerUser(this.registerform.value).subscribe(x=>{
+      let data = x;
+      console.log(data);
+      if(data=="success"){
+      this.toastr.success('User Registered', 'Success');
+      setInterval(() => {
+        this.router.navigateByUrl('login')
+      }, 5000);
+
+      }
+    })
+
+
   }
 
   getControl(val: any): AbstractControl | null {
@@ -102,10 +139,13 @@ export class LoginRegisterUserComponent {
       return;
     }
     const countryId = parseInt(country.target.value);
+
     this.dropdownService.getStates(countryId).subscribe( res => {
       this.states = res;
+      console.log(this.states);
     });
   }
+
   selectedState(state: any) {
     if (!state) {
       this.registerform.controls['city'].setValue('');
@@ -115,10 +155,8 @@ export class LoginRegisterUserComponent {
     const stateId = parseInt(state.target.value);
     this.dropdownService.getCities(stateId).subscribe(res =>{
       this.cities = res;
-      console.log(this.cities);
-    }
+    });
 
-    );
   }
 
 }

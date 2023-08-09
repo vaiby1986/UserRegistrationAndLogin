@@ -8,21 +8,26 @@ import { LoginRegisterUserComponent } from './login-register-user/login-register
 import {HttpClientModule} from '@angular/common/http';
 import { ConfirmvalidatorDirective } from './confirmvalidator.directive';
 import { LoginuserComponent } from './loginuser/loginuser.component'
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginRegisterUserComponent,
     ConfirmvalidatorDirective,
-    LoginuserComponent
+    LoginuserComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]
